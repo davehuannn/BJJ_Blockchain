@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJJ Competition</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.6/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>BJJ Competition Registration</h1>
+    <form id="registerForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="number" id="age" placeholder="Age" required>
+        <input type="text" id="belt" placeholder="Belt" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Check-In</h2>
+    <button id="checkInButton">Check-In</button>
+
+    <script>
+        const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+        const contractABI = YOUR_CONTRACT_ABI;
+
+        const web3 = new Web3(window.ethereum);
+        let contract;
+
+        window.onload = async () => {
+            await window.ethereum.enable();
+            const accounts = await web3.eth.getAccounts();
+            contract = new web3.eth.Contract(contractABI, contractAddress, { from: accounts[0] });
+        };
+
+        document.getElementById('registerForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const belt = document.getElementById('belt').value;
+            await contract.methods.register(name, age, belt).send();
+            alert('Registration successful');
+        };
+
+        document.getElementById('checkInButton').onclick = async () => {
+            await contract.methods.checkIn().send();
+            alert('Check-In successful');
+        };
+    </script>
+</body>
+</html>
